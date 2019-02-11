@@ -72,8 +72,16 @@ bundle common package_module_knowledge
     slackware::
       "platform_default" string => "slackpkg";
 
+@if minimum_version(3.12.2)
+
+      # As part of ENT-2719 3.12.2 introduced package_method attributes for
+      # specifying the interpreter and specifying the module path. These
+      # attributes are not known in previous versions and must be guarded by the
+      # minimum_version macro so that they are not seen as syntax errors.
+
     windows::
       "platform_default" string => "msiexec";
+@endif
 }
 
 body package_module apt_get
@@ -184,8 +192,18 @@ body package_module msiexec
 {
     query_installed_ifelapsed => "60";
     query_updates_ifelapsed => "1440";
+
+@if minimum_version(3.12.2)
+
+      # As part of ENT-2719 3.12.2 introduced package_method attributes for
+      # specifying the interpreter and specifying the module path. These
+      # attributes are not known in previous versions and must be guarded by the
+      # minimum_version macro so that they are not seen as syntax errors.
+
     interpreter => "$(sys.winsysdir)$(const.dirsep)cmd.exe /c ";
     module_path => "$(def.dir_modules)$(const.dirsep)packages$(const.dirsep)msiexec.bat";
+@endif
+
 }
 
 bundle common packages_common
